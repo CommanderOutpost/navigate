@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Function to print the usage information
+print_usage() {
+    echo "Usage: navigation <search_pattern>"
+}
+
+#Check if there is at least one argument
+if [[ $# -lt 1 ]]; then
+    print_usage
+    return
+fi
+# Check if there is more than one argument
+if [[ $# -gt 1 ]]; then
+    echo "bash: navigate: too many arguments"
+    print_usage
+    return
+fi
+
+# Function to perform the search and navigate to the chosen path
+perform_search_and_navigation() {
+    # Perform the search and store the results in an array
+    search_pattern="$1"
+    found_paths=()
+    while IFS= read -r -d '' path; do
+        found_paths+=("$path")
+    done < <(find /home/$(whoami)/ -name "$search_pattern" -print0)
+    
+    # Check if any paths were found
+    if [[ ${#found_paths[@]} -eq 0 ]]; then
+        echo "No paths found matching the search pattern."
+        return
+    fi
+    
+    echo "Found paths:"
+    for i in "${!found_paths[@]}"; do
+        echo "$i: ${found_paths[$i]}"
+    done
+    
+    while true; do
+        echo
+        
+        read -p "Enter the number of the path you want to navigate to (or 'n' to stop): " selected_path_index
+        
+        # Check if the user wants to stop
+        if [[ "$selected_path_index" = "n" ]]; then
+            echo "Navigation cancelled by the user."
+            return
+        fi
+        
+        # Validate the user's choice
+        if ! [[ "$selected_path_index" =~ ^[0-9]+$ ]]; then
+            echo "Invalid choice. Please enter a valid number."
+            continue
+        fi
+        
+        if [[ "$selected_path_index" -ge 0 ]] && [[ "$selected_path_index" -lt ${#found_paths[@]} ]]; then
+            path_to_navigate="${found_paths[$selected_path_index]}"
+            
+            # Check if the chosen path is a file
+            if [[ -f "$path_to_navigate" ]]; then
+                # Get the parent directory of the file
+                parent_dir=$(dirname "$path_to_navigate")
+                path_to_navigate="$parent_dir"
+            fi
+            
+            
+            cd "$path_to_navigate"
+            echo "Navigated to '$path_to_navigate'."
+            return
+        else
+            echo "Invalid choice. Please enter a valid number."
+        fi
+    done
+}
+
+# Check if there is at least one argument
+
+
+# Call the function with the search pattern argument
+perform_search_and_navigation "$1"
