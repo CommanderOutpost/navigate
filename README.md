@@ -1,6 +1,6 @@
-# Navigate
+# navigate
 
-Navigate is a command-line tool that allows you to search for files and navigate to the chosen path quickly.
+`navigate` is a command-line tool that allows you to search for files and navigate to the chosen path quickly.
 
 ## Installation
 
