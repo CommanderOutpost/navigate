@@ -6,7 +6,10 @@
 
 To install and use Navigate, follow these steps:
 
-1. Download the `navigate` package for your Linux distribution.
+1. Download the `navigate` package for your Linux distribution.\
+
+   - Click [here](https://github.com/CommanderOutpost/navigate/blob/main/navigate.deb) for debian-based distributions (e.g., Ubuntu)
+   - Red Hat-based distributions in progress
 
 2. Open a terminal and navigate to the directory where the package is downloaded.
 
