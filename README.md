@@ -22,7 +22,7 @@ To install and use Navigate, follow these steps:
 
    - For Red Hat-based distributions (e.g., CentOS):
      ```
-     sudo rpm -i navigate.rpm
+     sudo rpm -i navigate-1.0-1.x86_64.rpm
      ```
 
 4. After installation, you can start using the `navigate` command in the terminal.
