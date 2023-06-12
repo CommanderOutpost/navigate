@@ -6,19 +6,19 @@ print_usage() {
 }
 
 num_arguments=$#
-check_arguments_and_perform_search() {
+check_bad_arguments() {
     if [[ "$num_arguments" -gt 1 ]]; then
         echo "bash: navigation: too many arguments"
         print_usage
-        return
-    fi
-    if [[ "$num_arguments" -lt 1 ]]; then
+        return 0
+    elif [[ "$num_arguments" -lt 1 ]]; then
         print_usage
-        return
+        return 0
+    else
+        return 1
     fi
-
-    perform_search_and_navigation "$1"
 }
+
 
 # Function to perform the search and navigate to the chosen path
 perform_search_and_navigation() {
@@ -42,31 +42,31 @@ perform_search_and_navigation() {
     
     while true; do
         echo
-
+        
         read -p "Enter the number of the path you want to navigate to (or 'n' to stop): " selected_path_index
-
+        
         # Check if the user wants to stop
         if [[ "$selected_path_index" = "n" ]]; then
             echo "Navigation cancelled by the user."
             return
         fi
-
+        
         # Validate the user's choice
         if ! [[ "$selected_path_index" =~ ^[0-9]+$ ]]; then
             echo "Invalid choice. Please enter a valid number."
             continue
         fi
-
+        
         if [[ "$selected_path_index" -ge 0 ]] && [[ "$selected_path_index" -lt ${#found_paths[@]} ]]; then
             path_to_navigate="${found_paths[$selected_path_index]}"
-
+            
             # Check if the chosen path is a file
             if [[ -f "$path_to_navigate" ]]; then
                 # Get the parent directory of the file
                 parent_dir=$(dirname "$path_to_navigate")
                 path_to_navigate="$parent_dir"
             fi
-
+            
             cd "$path_to_navigate"
             echo "Navigated to '$path_to_navigate'."
             return
@@ -77,4 +77,10 @@ perform_search_and_navigation() {
 }
 
 # Call the function with the search pattern argument
-check_arguments_and_perform_search
+# check_arguments_and_perform_search
+
+if check_bad_arguments; then
+    :
+else
+    perform_search_and_navigation "$1"
+fi
