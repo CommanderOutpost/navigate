@@ -19,15 +19,14 @@ check_bad_arguments() {
     fi
 }
 
-
 # Function to perform the search and navigate to the chosen path
 perform_search_and_navigation() {
     # Perform the search and store the results in an array
     search_pattern="$1"
     found_paths=()
-    while IFS= read -r -d '' path; do
+    while IFS= read -r path; do
         found_paths+=("$path")
-    done < <(find /home/$(whoami)/ -name "$search_pattern" -print0)
+    done < <(locate -r "$search_pattern")
     
     # Check if any paths were found
     if [[ ${#found_paths[@]} -eq 0 ]]; then
